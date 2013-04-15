@@ -16,9 +16,10 @@ typedef struct {
 } t_list ;
 
 /*** insertion ******************/
-void list_insert( t_list* list, int idx, int value ) ;
+void list_insert( t_list* listIn, int idx, int value ) ;
 
 /*** delete and element ****/
+void  list_remove_index( t_list * listIn, int idx ) ;
 
 
 /**** create a new liste ********/
@@ -37,7 +38,11 @@ int main ( int argc, char ** argv ){
     testList -> data[ 2 ] = 87 ;
     testList -> data[ 3 ] = 40 ;
     testList -> data[ 4 ] = 35 ;
-    display_list( *testList )  ;
+    testList -> length    = 5  ;
+    display_list( *testList )  ; 
+    list_insert( testList, 1,22);
+    list_remove_index( testList, 1 );
+    display_list( *testList )  ; 
 
     
 
@@ -87,16 +92,16 @@ void display_list( t_list listIn ) {
 /*** insertion ******************/
 void list_insert( t_list* listIn, int idx, int value ){
 
-    if ( ( idx > listIn -> max_size ) &&  ( idx > lenght ) && ( lenght > max_size ) )
+    if ( ( idx > listIn -> max_size - 1 ) || ( idx > listIn -> length - 1 ) || ( listIn -> length >= listIn -> max_size ) )
     {
-        return " indice invalide " ;
+        printf( " indice invalide insertion \n " ) ;
         return;
     }
     
 
-    int i = lenght;
+    int i = listIn -> length;
 
-    for( ; i > (listIn -> idx) ; i-- ){
+    for( ; i > idx ; i-- ){
 
         listIn -> data[ i ] = listIn -> data[ i - 1 ] ; 
 
@@ -104,5 +109,24 @@ void list_insert( t_list* listIn, int idx, int value ){
 
     listIn -> data [ idx ] = value ;
     listIn -> length++ ;
+
+}
+
+/**** delete an value ****/
+void  list_remove_index( t_list * listIn, int idx ) {
+
+    if ( idx > ( listIn -> length ) && idx > 0 ){
+        printf ( " invalid index remove \n " ) ;
+        return;
+    }
+
+    int i = 0 ;
+
+    for( i = idx ; i < listIn -> length; i++ ){
+        listIn -> data [ i ] = listIn -> data[ i + 1 ] ;
+    }
+
+    listIn -> length -- ;
+
 
 }
