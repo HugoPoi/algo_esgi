@@ -4,6 +4,8 @@
 
 
 
+
+
 /****** list display ********/
 typedef struct {
 
@@ -13,11 +15,17 @@ typedef struct {
 
 } t_list ;
 
+/*** insertion ******************/
+void list_insert( t_list* list, int idx, int value ) ;
+
+/*** delete and element ****/
+
+
 /**** create a new liste ********/
 t_list* new( unsigned int max ) ;
 
 /**** display the list ********/
-void display_list( t_list* ) ;
+void display_list( t_list ) ;
 
 /***** main start *************/
 int main ( int argc, char ** argv ){
@@ -29,10 +37,7 @@ int main ( int argc, char ** argv ){
     testList -> data[ 2 ] = 87 ;
     testList -> data[ 3 ] = 40 ;
     testList -> data[ 4 ] = 35 ;
-    /* TRicks !! */
-    testList -> length = 5;
-    /* TRicks !! */
-    display_list( testList )  ;
+    display_list( *testList )  ;
 
     
 
@@ -58,9 +63,9 @@ t_list* new( unsigned int max ) {
 }
 
 /*** display list content *********/
-void display_list( t_list* listIn ) {
+void display_list( t_list listIn ) {
 
-    if ( listIn == NULL ) {
+    if ( listIn.data == NULL ) {
         printf( " your list is empty " ) ;
     } 
 
@@ -68,9 +73,36 @@ void display_list( t_list* listIn ) {
 
         /**** display the list contents ****/
         int i = 0 ;
-        for ( i = 0; i < listIn -> length-1; i++ ){
-            printf( "[%d]:%d,", i, listIn -> data[ i ] ) ;
-        }
-        printf( "[%d]:%d\n", i, listIn -> data[ i ] ) ;
+        for ( i = 0; i < listIn.length; i++ ){
+            printf( "value %d of the list is: %d \n", i+1, listIn.data[ i ] ) ;
+        } 
     }
+
+
+}
+
+
+
+
+/*** insertion ******************/
+void list_insert( t_list* listIn, int idx, int value ){
+
+    if ( ( idx > listIn -> max_size ) &&  ( idx > lenght ) && ( lenght > max_size ) )
+    {
+        return " indice invalide " ;
+        return;
+    }
+    
+
+    int i = lenght;
+
+    for( ; i > (listIn -> idx) ; i-- ){
+
+        listIn -> data[ i ] = listIn -> data[ i - 1 ] ; 
+
+    } 
+
+    listIn -> data [ idx ] = value ;
+    listIn -> length++ ;
+
 }
