@@ -32,15 +32,12 @@ int main ( int argc, char ** argv ){
 
     t_list * testList = new( 5 ) ;
 
-    testList -> data[ 0 ] = 15 ;
-    testList -> data[ 1 ] = 28 ;
-    testList -> data[ 2 ] = 87 ;
-    testList -> data[ 3 ] = 40 ;
-    testList -> data[ 4 ] = 35 ;
+    list_insert(testList,0,15);
+    list_insert(testList,0,28);
+    list_insert(testList,0,87);
+    list_insert(testList,0,40);
+    list_insert(testList,0,35);
     display_list( *testList )  ;
-
-    
-
 
     return 0 ;
 
@@ -87,16 +84,16 @@ void display_list( t_list listIn ) {
 /*** insertion ******************/
 void list_insert( t_list* listIn, int idx, int value ){
 
-    if ( ( idx > listIn -> max_size ) &&  ( idx > lenght ) && ( lenght > max_size ) )
+    if ( ( idx > listIn -> max_size ) &&  ( idx > listIn->length ) && ( listIn->length > listIn->max_size ) )
     {
-        return " indice invalide " ;
+         printf("indice invalide\n");
         return;
     }
     
 
-    int i = lenght;
+    int i = listIn->length;
 
-    for( ; i > (listIn -> idx) ; i-- ){
+    for( ; i > idx ; i-- ){
 
         listIn -> data[ i ] = listIn -> data[ i - 1 ] ; 
 
