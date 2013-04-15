@@ -17,7 +17,7 @@ typedef struct {
 t_list* new( unsigned int max ) ;
 
 /**** display the list ********/
-void display_list( t_list ) ;
+void display_list( t_list* ) ;
 
 /***** main start *************/
 int main ( int argc, char ** argv ){
@@ -29,7 +29,10 @@ int main ( int argc, char ** argv ){
     testList -> data[ 2 ] = 87 ;
     testList -> data[ 3 ] = 40 ;
     testList -> data[ 4 ] = 35 ;
-    display_list( *testList )  ;
+    /* TRicks !! */
+    testList -> length = 5;
+    /* TRicks !! */
+    display_list( testList )  ;
 
     
 
@@ -55,9 +58,9 @@ t_list* new( unsigned int max ) {
 }
 
 /*** display list content *********/
-void display_list( t_list listIn ) {
+void display_list( t_list* listIn ) {
 
-    if ( listIn.data == NULL ) {
+    if ( listIn == NULL ) {
         printf( " your list is empty " ) ;
     } 
 
@@ -65,10 +68,9 @@ void display_list( t_list listIn ) {
 
         /**** display the list contents ****/
         int i = 0 ;
-        for ( i = 0; i < listIn.max_size; i++ ){
-            printf( "value %d of the list is: %d \n", i+1, listIn.data[ i ] ) ;
-        } 
+        for ( i = 0; i < listIn -> length-1; i++ ){
+            printf( "[%d]:%d,", i, listIn -> data[ i ] ) ;
+        }
+        printf( "[%d]:%d\n", i, listIn -> data[ i ] ) ;
     }
-
-
 }
