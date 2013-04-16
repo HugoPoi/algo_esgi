@@ -1,6 +1,6 @@
 CC    = gcc
 RM    = rm -Rf
-SRC   = ./exo1.c 
+SRC   = ./exo2.c 
 CFLAGS= -Wall -Werror -ggdb
 LFLAGS= -ggdb
 EXEC  = demo 
