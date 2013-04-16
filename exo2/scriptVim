@@ -1,0 +1,7 @@
+
+read commitName
+
+git add .
+git commit -am "commitName"
+git pull origin master 
+git push origin master
