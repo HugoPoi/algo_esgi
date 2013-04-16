@@ -3,7 +3,7 @@ RM    = rm -Rf
 SRC   = ./exo1.c 
 CFLAGS= -Wall -Werror -ggdb
 LFLAGS=
-EXEC  = demo 
+EXEC  = demo.exe 
 OBJ  := $(SRC:.c=.o) 
 
 %.o:%.c
