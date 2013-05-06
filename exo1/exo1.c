@@ -11,7 +11,9 @@ enum OCCURENCE_Strategy{
 };
 
 
-/**** define list ****/
+
+
+/****** list display ********/
 typedef struct {
 
     int*         data     ;
@@ -20,50 +22,55 @@ typedef struct {
 
 } t_list ;
 
-/**** create a new liste ****/
-t_list* new( unsigned int ) ;
+/*** insertion ******************/
+void list_insert( t_list* listIn, int idx, int value ) ;
 
-/**** insert element ****/
-void list_insert(t_list* , int , int ) ;
-void list_insert_infinite(t_list* , int ,int );
+/*** delete and element ****/
+void  list_remove_index( t_list * listIn, int idx ) ;
 
-/**** remove element ****/
-void list_remove(t_list* , int );
-void list_remove_value(t_list* , int , enum OCCURENCE_Strategy);
+/******* list remove some value ******/
+void list_remove_value( t_list* listIn, int value,enum OCCURENCE_Strategy occ ) ;
 
-/**** list reverte ****/
-void list_reverte_inside(t_list* );
-t_list* list_reverte(t_list* );
+/**** create a new liste ********/
+t_list* new( unsigned int max ) ;
 
-/**** display the list ****/
-void display_list(t_list* ) ;
+/**** display the list ********/
+void display_list( t_list* listIn ) ;
+
+/*** revert inside ************/
+/*** revert copy  *************/
+/*** list insert infini *******/
+void list_insert_infinite( t_list * listIn, int idx, int value );
+
 
 /***** main start *************/
 int main ( int argc, char ** argv ){
 
-    t_list * testList = new( 5 ) ;
+    t_list * testList = new( 8 ) ;
 
-    list_insert(testList,0,15);
-    list_insert(testList,0,28);
-    list_insert(testList,0,87);
-    list_insert(testList,0,87);
-    list_insert(testList,0,40);
-    list_insert(testList,0,35);
-    list_insert_infinite(testList,0,35);
-    list_insert_infinite(testList,0,35);
-    list_insert_infinite(testList,0,35);
-    list_insert_infinite(testList,0,35);
-    list_insert_infinite(testList,0,35);
-    list_insert_infinite(testList,0,35);
-    list_insert_infinite(testList,0,35);
-    //list_delete(testList, 3);
-    display_list( testList );
-    //list_remove_value(testList,87,ALL);
-    //list_reverte_inside(testList);
-    //display_list( testList );
+    testList -> data[ 0 ] = 12 ;
+    testList -> data[ 1 ] = 18 ;
+    testList -> data[ 2 ] = 18 ;
+    testList -> data[ 3 ] = 30 ;
+    testList -> data[ 4 ] = 18 ;
+    testList -> data[ 5 ] = 35 ;
+    testList -> data[ 6 ] = 25 ;
+    testList -> data[ 7 ] = 35 ;
+    testList -> length    = 8  ;
+    display_list( testList )  ; 
+    //list_insert( testList, 1,22);
+    printf ( "after all \n") ;
+//    list_remove_value( testList, 18, ALL );
+    display_list( testList )  ; 
+    printf ( "after all \n") ;
+    list_insert_infinite( testList, 2, 33 );
+    display_list( testList )  ; 
+
     return 0 ;
 
-}
+} 
+
+
 
 
 /****** create a new list ********/
@@ -79,11 +86,11 @@ t_list* new( unsigned int max ) {
 
 }
 
-/******** display list content ********/
+/*** display list content *********/
 void display_list( t_list* listIn ) {
 
     if ( listIn == NULL ) {
-        printf( "your list is empty\n" ) ;
+        printf( " your list is empty " ) ;
     } 
 
     else{
@@ -91,18 +98,22 @@ void display_list( t_list* listIn ) {
         /**** display the list contents ****/
         int i = 0 ;
         for ( i = 0; i < listIn -> length; i++ ){
-            printf( "value %d of the list is: %d \n", i, listIn -> data[ i ] ) ;
+            printf( "value %d of the list is: %d \n", i+1, listIn -> data[ i ] ) ;
         } 
     }
 
+
 }
 
-/******** insertion ********/
+
+
+
+/*** insertion ******************/
 void list_insert( t_list* listIn, int idx, int value ){
 
-    if ( ( idx > listIn -> max_size -1 ) ||  ( idx > listIn->length-1) || ( listIn->length > listIn->max_size-1) )
+    if ( ( idx > listIn -> max_size - 1 ) || ( idx > listIn -> length - 1 ) || ( listIn -> length >= listIn -> max_size ) )
     {
-         printf("idx out of range!\n");
+        printf( " indice invalide insertion \n " ) ;
         return;
     }
     
@@ -120,82 +131,158 @@ void list_insert( t_list* listIn, int idx, int value ){
 
 }
 
-/******** remove ********/
-void list_remove(t_list* listIn, int idx){
-  
-    if( (idx >= listIn->length) || (idx < 0)){
-      printf("Error!\n");
-      return;
+/**** delete an value ****/
+void  list_remove_index( t_list * listIn, int idx ) {
+
+    if ( idx > ( listIn -> length ) || idx < 0 ){
+        printf ( " invalid index remove \n " ) ;
+        return;
     }
-    
-   int i=idx;
-   for(;i < listIn -> length;i++){
-      listIn -> data[ i ] = listIn -> data[ i + 1 ] ; 
-     }
-     listIn -> length-- ;
-  }
-  
-void list_remove_value(t_list* listIn, int value, enum OCCURENCE_Strategy occ){
-  
-  if(ALL == occ){
-      int r=0,w=0;
-  for(; r < listIn->length;r++){
-    if(value != listIn->data[r]){
-      if(r!=w) listIn->data[w] = listIn->data[r];
-      w++;
+
+    int i = 0 ;
+
+    for( i = idx ; i < listIn -> length; i++ ){
+        listIn -> data [ i ] = listIn -> data[ i + 1 ] ;
     }
-  }
-    listIn -> length = w;
-  }
-  
-  }
-  
-  void list_reverte_inside(t_list* list){
-    int temp;
-    int i=0;
-    while(i< list->length/2){
-      temp = list->data[i];
-      list->data[i] = list->data[list->length-i-1];
-      list->data[list->length-i-1] = temp ;
-      i++;
+
+    listIn -> length -- ;
+
+
+}
+
+/******* list remove some value ******/
+void list_remove_value( t_list* listIn, int value, enum OCCURENCE_Strategy occ ) {
+
+    if( !listIn || listIn -> length == 0 ){
+        printf ( " list is empty " ) ;
     }
-    
-  }
-  
-  t_list* list_reverte(t_list* list){
-    t_list* out = new(list->max_size);
-    out->length = list-> length;
-    int i = 0;
-    for(; i < list-> length ; i++){
-      
-      out->data[i] = list->data[list-> length-i-1];
-      
-      }
-    return out;
-    }
-    
-  void list_insert_infinite(t_list* list, int idx,int value){
-    
-    if(list->length == list-> max_size){
-        if(0 <= idx && idx <= list->length){
-          int* tmpdata = ( int* ) malloc ( sizeof ( int ) * list-> max_size * 2 ) ;
-          
-          int i = list->length;
-            for( ; i > idx ; i-- ){
-                tmpdata[ i ] = list -> data[ i - 1 ] ; 
-            }
-            tmpdata[ i-- ] = value ;
-            for(; i > 0 ; i--){
-              tmpdata[i] = list -> data[i];
-            }
-            
-            free(list -> data);
-            
-            list-> data = tmpdata;
-            list->length ++;
-            list-> max_size = list-> max_size * 2;
+
+    int w = 0 ;
+    int r = 0 ;
+
+    for( r = 0 ; r < listIn -> length ; r++ ){
+
+        if ( value != listIn -> data[ r ] ){
+            if ( r != w )
+                listIn -> data[ w ] = listIn -> data[ r ] ;
+            w++;
         }
-        else printf("idx out of range!\n");
+    }
+    listIn -> length = w ;
+
+/*
+    int i = 0 ;
+    int all= 0;
+    int tempOcc = 0 ;
+    int templeng =  listIn -> length ;
+
+    for( i = 0 ; i < listIn -> length; i++ ){
+
+        int j = i+ 1 ;
         
-     }else return list_insert(list,idx,value);
-  }
+        if( listIn -> data[ i ] == value && ( occ == FIRST ) ){
+            list_remove_index( listIn,i ) ;
+            break ;
+        }
+
+        if( listIn -> data[ i ] == value && ( occ == LAST ) ){
+            tempOcc = i ;
+
+        }
+
+        if( listIn -> data [ j ] != value && occ == ALL ){
+
+        }
+        
+        if ( all ){
+            listIn -> data[i] = listIn -> data [ i + 1 ];
+        }
+
+        if( listIn -> data[ i ] == value && ( occ == ALL ) ){
+            //list_remove_index( listIn, i ) ;
+            listIn -> data[i] = listIn -> data [ i + 1 ];
+            all = 1;
+            templeng -- ;
+
+        }
+
+        if( listIn -> data[ i-1 ] == value && ( occ == ALL ) ){
+            //list_remove_index( listIn, i ) ;
+            listIn -> data[ i -1 ] = listIn -> data [ i  ];
+            all = 1;
+            //templeng -- ;
+
+        }
+        
+
+
+    }
+
+    
+    if( occ == LAST)
+    list_remove_index( listIn, tempOcc ) ; 
+    listIn -> length = templeng ;
+    */
+}
+
+/******* insert infinite ********/
+void list_insert_infinite( t_list * listIn, int idx, int value ){
+
+    int * tempData ;
+    if ( ( idx <= listIn -> length - 1 ) && ( listIn -> length == listIn -> max_size ) ){
+
+        tempData = ( int * ) malloc ( sizeof( int ) * ( (listIn -> max_size) << 1  ) ) ;
+
+
+        int i = 0 ;
+        int j = 0 ;
+        for( ; i < listIn -> max_size+1  ; i ++ ){
+
+//            tempData [ i ] = listIn -> data[ i ] ;
+
+            if( idx != j )
+            {
+                tempData [ j ] = listIn -> data[ i ] ;
+            }
+            else{
+                tempData [ j ] = value ;
+                i--;
+            }
+
+            j++ ;
+
+
+
+        } 
+
+        free ( listIn -> data ) ;
+        listIn -> length++ ;
+        listIn -> max_size = listIn -> max_size * 2 ;
+        listIn -> data  = tempData ;
+        //list_insert( listIn, idx, value) ;
+    }
+    else{
+        printf( " use insert i\n" ) ;
+    }
+}
+
+
+/** decouper en deux boucle ***/
+
+
+
+/*
+    if( idx != j )
+    {
+    tempData [ j ] = listIn -> data[ i ] ;
+    }
+    else{
+    tempData [ j ] = value ;
+    i--;
+    }
+
+    j++ ;
+
+    */
+
+
