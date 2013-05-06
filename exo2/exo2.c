@@ -23,6 +23,7 @@ int list_chain_get_index_for_value(T_list_chain* listIn, int value,enum occurenc
 void list_insert(T_list_chain** listIn, int value,int index);
 /***** remove ******/
 void list_chain_remove_value(T_list_chain** listIn, int value, enum occurence_strategy strategy);
+void list_chain_remove_index(T_list_chain** listIn, int index);
 
 /**** main *********/
 int main ( int argc , char ** argv ){
@@ -36,10 +37,11 @@ int main ( int argc , char ** argv ){
     printf( "value:%d\n",list_chain_get_value_by_index(list,26));
     printf( "index:%d\n",list_chain_get_index_for_value(list, 8,LAST));
     list_insert(&list,23,0);
-    list_chain_display( list ) ;
-    printf( "La taille vaut:%d \n", list_length( list ) ) ;
     list_insert(&list,23,2);
-    list_chain_remove_value(&list,23,FIRST);
+    list_chain_display( list ) ;
+    //printf( "La taille vaut:%d \n", list_length( list ) ) ;
+    list_chain_remove_value(&list,23,ALL);
+    list_chain_remove_index(&list,2);
     list_chain_display( list ) ;
     printf( "La taille vaut:%d \n", list_length( list ) ) ;
     return 0 ;
@@ -120,15 +122,45 @@ int list_chain_get_index_for_value(T_list_chain* listIn, int value,enum occurenc
   void list_chain_remove_value(T_list_chain** listIn, int value, enum occurence_strategy strategy){
 	  switch (strategy){
 	  	  case FIRST:
-	  		  while(listIn && (*listIn)->value == value && (listIn=&(*listIn)->next));
+	  		  while(listIn && ((*listIn)->value != value) && (listIn=&(*listIn)->next));
 	  		  if((*listIn)->value == value) {
 	  			  T_list_chain* tmp = (*listIn)->next;
 	  			  free(*listIn);
 	  			  *listIn = tmp;
 	  		  }
 	  		  break;
+	  	  case LAST:{
+	  		  T_list_chain** tmplast = NULL;
+	  		  while(*listIn){
+	  			  if((*listIn)->value == value) tmplast = listIn;
+	  			listIn = &(*listIn)->next;
+	  		  }
+	  		  if(*tmplast != NULL){
+	  			  T_list_chain* tmp2 = (*tmplast)->next;
+	  			  free(*tmplast);
+	  			  *tmplast = tmp2;
+	  		  }
+	  		  break;}
+	  	  case ALL:
+	  		  while(*listIn){
+		  		  if((*listIn)->value == value) {
+		  			  T_list_chain* tmp = (*listIn)->next;
+		  			  free(*listIn);
+		  			  *listIn = tmp;
+		  		  }
+		  		listIn=&(*listIn)->next;
+	  		  } break;
 	  	  default:
 	  		  break;
 	  }
 
+  }
+
+  void list_chain_remove_index(T_list_chain** listIn, int index){
+    while(listIn && index-- && (listIn=&(*listIn)->next));
+    if(-1==index){
+	  T_list_chain* tmp = (*listIn)->next;
+	  free(*listIn);
+	  *listIn = tmp;
+    }
   }
