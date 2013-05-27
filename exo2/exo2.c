@@ -43,6 +43,12 @@ void list_chain_remove_value( T_list_chain ** , int , enum OCCURENCE_STRATEGY ) 
 /*** remove by index ***/
 void list_chain_remove_index(T_list_chain** , int );
 
+/*** revert copy ***/
+T_list_chain* list_chain_revert(T_list_chain* );
+
+/*** revert inside ***/
+void list_chain_revert_inside(T_list_chain** );
+
 
 /**** main *********/
 int main ( int argc , char ** argv ){
@@ -64,6 +70,9 @@ int main ( int argc , char ** argv ){
     list_chain_remove_value(&list,23,ALL);
     list_chain_remove_index(&list,2);
     list_chain_display( list ) ;
+    //T_list_chain* newlist = list_chain_revert(list);
+    list_chain_revert_inside(&list);
+    list_chain_display( list);
     printf( "La taille vaut:%d \n", list_length( list ) ) ;
     return 0 ;
 }
@@ -133,11 +142,13 @@ int list_chain_get_index_for_value(T_list_chain* listIn, int value,enum OCCURENC
   }
   
   void list_chain_insert(T_list_chain** listIn, int value,int index){
-    while(listIn && index-- && (listIn=&(*listIn)->next));
+    while(((*listIn)!=NULL) && listIn && index-- && (listIn=&(*listIn)->next));
     if(-1==index){
         T_list_chain* tmp = *listIn;
         (*listIn) = list_chain_new(value);
         (*listIn)->next = tmp;
+    }else{
+    	(*listIn) = list_chain_new(value);
     }
   }
 
@@ -187,3 +198,23 @@ int list_chain_get_index_for_value(T_list_chain* listIn, int value,enum OCCURENC
     }
   }
 
+  T_list_chain* list_chain_revert(T_list_chain* listIn){
+	  T_list_chain* copyList = NULL;
+	  int length = list_length(listIn), index = 0;
+	  while(index < length)
+		  list_chain_insert(&copyList,list_chain_get_value_by_index(listIn,index++),0);
+	  return copyList;
+  }
+
+  void list_chain_revert_inside(T_list_chain** listIn){
+	  T_list_chain* node = (*listIn)->next;
+	  T_list_chain* newHead = (*listIn);
+	  while(node){
+		  T_list_chain* next = node->next;
+		  node->next = newHead;
+		  newHead = node;
+		  node = next;
+	  }
+	  (*listIn)->next = NULL;
+	  (*listIn) = newHead;
+  }
