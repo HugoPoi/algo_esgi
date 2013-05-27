@@ -8,17 +8,21 @@ typedef struct S_pile{
     struct S_pile* next ;
 }T_pile ;
 
+/***** LIFO functions *****/
 
 void push(T_pile** , int value);
-
 int peek(T_pile* );
-
 int pop(T_pile** );
 
+/***** End LIFO functions *****/
+
+/***** FIFO functions *****/
 void enqueue(T_pile**, int );
 int dequeue(T_pile**);
 int peek_fifo(T_pile* );
-
+void display_fifo(T_pile* );
+int fifo_length(T_pile* fifoIn);
+/***** End FIFO functions *****/
 
 int main( int argc , char ** argv ){
   
@@ -28,16 +32,19 @@ int main( int argc , char ** argv ){
   enqueue(&fifo,2);
   enqueue(&fifo,3);
   enqueue(&fifo,4);
-
-  printf("%d\n",peek_fifo(fifo));
-  
-  printf("%d\n",dequeue(&fifo));
-  enqueue(&fifo,6);
-  printf("%d\n",peek_fifo(fifo));
+  display_fifo(fifo);
   printf("%d\n",dequeue(&fifo));
   printf("%d\n",dequeue(&fifo));
   printf("%d\n",dequeue(&fifo));
-  
+  printf("%d\n",dequeue(&fifo));
+  enqueue(&fifo,13);
+  enqueue(&fifo,14);
+  enqueue(&fifo,15);
+  enqueue(&fifo,16);
+  display_fifo(fifo);
+  printf("%d\n",dequeue(&fifo));
+  printf("%d\n",dequeue(&fifo));
+  display_fifo(fifo);
   return 0;
   }
   
@@ -76,12 +83,34 @@ void enqueue(T_pile** fifoIn, int value){
 	 *fifoIn = tmp;
 }
 int dequeue(T_pile** fifoIn){
+	int out;
+	if(*fifoIn != (*fifoIn)->next){
 	T_pile* first = (*fifoIn)->next;
 	(*fifoIn)->next = first->next;
-	int out = first->value;
+	out = first->value;
 	free(first);
+	}else{
+		out = (*fifoIn)->value;
+		free(*fifoIn);
+		*fifoIn = NULL;
+	}
 	return out;
 }
 int peek_fifo(T_pile* fifoIn){
 	return fifoIn->next->value;
+}
+void display_fifo(T_pile* fifoIn){
+	T_pile* last = fifoIn;
+	fifoIn = fifoIn->next;
+	while(fifoIn != last){
+		printf("%d,",fifoIn->value);
+		fifoIn = fifoIn->next;
+	}
+	printf("%d:len=%d\n",fifoIn->value,fifo_length(last));
+}
+int fifo_length(T_pile* fifoIn){
+	T_pile* last = fifoIn;
+	int length=0;
+	while(((fifoIn = fifoIn->next) != last)) length++;
+	return length;
 }
