@@ -83,6 +83,7 @@ void enqueue(T_pile** fifoIn, int value){
 	 *fifoIn = tmp;
 }
 int dequeue(T_pile** fifoIn){
+	if(!*fifoIn) return -1;
 	int out;
 	if(*fifoIn != (*fifoIn)->next){
 	T_pile* first = (*fifoIn)->next;
@@ -101,16 +102,19 @@ int peek_fifo(T_pile* fifoIn){
 }
 void display_fifo(T_pile* fifoIn){
 	T_pile* last = fifoIn;
-	fifoIn = fifoIn->next;
-	while(fifoIn != last){
-		printf("%d,",fifoIn->value);
+	do{
 		fifoIn = fifoIn->next;
-	}
-	printf("%d:len=%d\n",fifoIn->value,fifo_length(last));
+		printf("%d ",fifoIn->value);
+	}while(fifoIn != last);
+	printf("len=%d\n",fifo_length(last));
 }
 int fifo_length(T_pile* fifoIn){
+	if(!fifoIn) return 0;
 	T_pile* last = fifoIn;
 	int length=0;
-	while(((fifoIn = fifoIn->next) != last)) length++;
+	do{
+		fifoIn = fifoIn->next;
+		length++;
+	}while(fifoIn != last);
 	return length;
 }
