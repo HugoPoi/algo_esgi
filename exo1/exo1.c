@@ -44,26 +44,28 @@ void list_insert_infinite( t_list * listIn, int idx, int value );
 void list_sort_selection(t_list *);
 void list_sort_bulle(t_list * inList);
 void list_tri_insertion(t_list * inList);
+//void list_tri_insertion_dich(t_list * inList);
 void list_permut(t_list * inList, int of_idx, int to_idx);
+//int list_search_dich(t_list inList,int lower_bound, int higher_bound, int val);
+int next_position(t_list * inList,int lower_bound, int higher_bound, int val);
+void tri_insertion_dicho_iter(t_list * inList);
 
 /***** main start *************/
 int main ( int argc, char ** argv ){
 
     t_list * testList = new( 8 ) ;
 
-    testList -> data[ 0 ] = 12 ;
-    testList -> data[ 1 ] = 18 ;
-    testList -> data[ 2 ] = 18 ;
-    testList -> data[ 3 ] = 30 ;
-    testList -> data[ 4 ] = 18 ;
-    testList -> data[ 5 ] = 35 ;
-    testList -> data[ 6 ] = 0 ;
-    testList -> data[ 7 ] = 35 ;
+    testList -> data[ 0 ] = 4 ;
+    testList -> data[ 1 ] = 3 ;
+    testList -> data[ 2 ] = 1 ;
+    testList -> data[ 3 ] = 4 ;
+    testList -> data[ 4 ] = 5 ;
+    testList -> data[ 5 ] = 6 ;
+    testList -> data[ 6 ] = 7 ;
+    testList -> data[ 7 ] = 8 ;
     testList -> length    = 8  ;
-    list_insert( testList, 1,22);
-    list_insert_infinite( testList, 2, 33 );
     display_list( testList )  ; 
-    list_tri_insertion(testList);
+    tri_insertion_dicho_iter(testList);
     display_list(testList);
 
 
@@ -256,5 +258,43 @@ void list_tri_insertion(t_list * inList){
 		for(j=i;j && inList->data[j-1] > inList->data[j]; j--){
 			list_permut(inList,j-1,j);
 		}
+	}
+}
+/*
+ * A CORRIGER ne marche pas
+ *
+void list_tri_insertion_dich(t_list * inList){
+
+	int lower_bound, higher_bound,i,j,middle;
+	for(i = 1; i < inList->length ; i++){
+		lower_bound = 0, higher_bound = i-1;
+
+		for(j=i ; j > lower_bound ; j--){
+			list_permut(inList,j-1,j);
+		}
+	}
+}
+
+int list_search_dich(t_list inList,int lower_bound, int higher_bound, int val){
+	int middle,i;
+	while(lower_bound != higher_bound && (middle = (lower_bound+higher_bound)/2)){
+		(inList->data[middle] > inList->data[i] )?
+			(higher_bound = middle-1) : (lower_bound = middle+1);
+		if(inList->data[middle] == inList->data[i]) higher_bound=lower_bound=middle+1;
+	}
+	return lower_bound;
+}*/
+int next_position(t_list * inList,int lower_bound, int higher_bound, int val){
+	int middle = (lower_bound + higher_bound) /2;
+	return (lower_bound == higher_bound) ? lower_bound :
+				(val <= inList->data[middle]) ? next_position(inList, lower_bound, middle, val)
+						: next_position(inList, middle+1, higher_bound, val);
+}
+void tri_insertion_dicho_iter(t_list * inList){
+	int i = 1, position, k=0;
+	for (; i < inList->length; i++) {
+		position = next_position(inList, 0, i, inList->data[i]);
+		for(k=i;k>position;k--)
+			list_permut(inList,k,k-1);
 	}
 }
