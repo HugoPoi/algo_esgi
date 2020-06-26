@@ -6,7 +6,7 @@
 /***** main start *************/
 int main ( int argc, char ** argv ){
 
-  T_pile* pile = NULL;
+  T_node* pile = NULL;
 
   for(int i = 0 ; i <= 10000; i++){
     enqueue(&pile, i);

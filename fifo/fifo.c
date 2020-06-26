@@ -3,35 +3,36 @@
 
 #include "fifo.h"
 
-void enqueue(T_pile** last, int value){
-  T_pile* newLink = malloc(sizeof(T_pile));
-  if(!*last){
-    *last = newLink;
+void enqueue(T_node** fifo, int value){
+  T_node* newNode = malloc(sizeof(T_node));
+  T_node* lastNode = *fifo;
+  if(!lastNode){
+    lastNode = newNode;
   }
-  newLink->value = value;
-  newLink->next = (*last)->next;
-  (*last)->next = newLink;
-  *last = newLink;
+  newNode->value = value;
+  newNode->next = lastNode->next;
+  lastNode->next = newNode;
+  *fifo = newNode;
 }
 
-int dequeue(T_pile** pile){
-  T_pile* first = (*pile)->next;
+int dequeue(T_node** fifo){
+  T_node* first = (*fifo)->next;
   int out = first->value;
-  if(first != *pile){
-    (*pile)->next = first->next;
+  if(first != *fifo){
+    (*fifo)->next = first->next;
   }else{
-    *pile = NULL;
+    *fifo = NULL;
   }
   free(first);
   return out;
 }
 
-int peek_fifo(T_pile* pile){
+int peek_fifo(T_node* pile){
   return pile->next->value;
 }
 
-void display_fifo(T_pile* pile){
-  T_pile* last = pile;
+void display_fifo(T_node* pile){
+  T_node* last = pile;
   int size = 0;
   do{
     size++;
@@ -42,8 +43,8 @@ void display_fifo(T_pile* pile){
   printf("len=%d\n", size);
 }
 
-int fifo_length(T_pile* pile){
-  T_pile* last = pile;
+int fifo_length(T_node* pile){
+  T_node* last = pile;
   int size = 0;
   do{
     size++;
